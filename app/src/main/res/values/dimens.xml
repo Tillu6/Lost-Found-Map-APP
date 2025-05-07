@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      A reasonable “design‑time” status‑bar inset.
+      On most phones this is around 24–32 dp.
+      At runtime WindowInsets will replace this value.
+    -->
+    <dimen name="status_bar_height">32dp</dimen>
+</resources>
