@@ -10,94 +10,108 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LostFoundDBHelper extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME    = "lost_found.db";
-    private static final int    DATABASE_VERSION = 1;
+    private static final String DB_NAME = "lostfound.db";
+    private static final int DB_VERSION = 2;
 
-    // Table and columns
-    private static final String TABLE_NAME       = "items";
-    private static final String KEY_ID           = "id";
-    private static final String KEY_TITLE        = "title";
-    private static final String KEY_DESCRIPTION  = "description";
-    private static final String KEY_LOCATION     = "location";
-    private static final String KEY_TYPE         = "type";
-    private static final String KEY_CONTACT      = "contact";
+    public static final String TABLE_NAME = "items";
+    public static final String COL_ID    = "_id";
+    public static final String COL_NAME  = "name";
+    public static final String COL_PHONE = "phone";
+    public static final String COL_DESC  = "description";
+    public static final String COL_DATE  = "date";
+    public static final String COL_LOC   = "location";
+    public static final String COL_LAT   = "latitude";
+    public static final String COL_LNG   = "longitude";
+    public static final String COL_TYPE  = "type";
 
     public LostFoundDBHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        super(context, DB_NAME, null, DB_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "("
-                + KEY_ID          + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + KEY_TITLE       + " TEXT,"
-                + KEY_DESCRIPTION + " TEXT,"
-                + KEY_LOCATION    + " TEXT,"
-                + KEY_TYPE        + " TEXT,"
-                + KEY_CONTACT     + " TEXT"
-                + ")";
-        db.execSQL(CREATE_TABLE);
+        String sql = "CREATE TABLE " + TABLE_NAME + " ("
+                + COL_ID    + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + COL_NAME  + " TEXT, "
+                + COL_PHONE + " TEXT, "
+                + COL_DESC  + " TEXT, "
+                + COL_DATE  + " TEXT, "
+                + COL_LOC   + " TEXT, "
+                + COL_LAT   + " REAL, "
+                + COL_LNG   + " REAL, "
+                + COL_TYPE  + " TEXT"
+                + ");";
+        db.execSQL(sql);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldV, int newV) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-        onCreate(db);
+        if (oldV < 2) {
+            db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COL_LAT + " REAL;");
+            db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + COL_LNG + " REAL;");
+        }
     }
 
-    public void addItem(LostFoundItem item) {
+    public long addItem(LostFoundItem item) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put(KEY_TITLE,       item.getTitle());
-        cv.put(KEY_DESCRIPTION, item.getDescription());
-        cv.put(KEY_LOCATION,    item.getLocation());
-        cv.put(KEY_TYPE,        item.getType());
-        cv.put(KEY_CONTACT,     item.getContact());
-        db.insert(TABLE_NAME, null, cv);
+        cv.put(COL_NAME, item.getName());
+        cv.put(COL_PHONE, item.getPhone());
+        cv.put(COL_DESC, item.getDescription());
+        cv.put(COL_DATE, item.getDate());
+        cv.put(COL_LOC, item.getLocation());
+        cv.put(COL_LAT,  item.getLatitude());
+        cv.put(COL_LNG,  item.getLongitude());
+        cv.put(COL_TYPE, item.getType());
+        long id = db.insert(TABLE_NAME, null, cv);
         db.close();
+        return id;
     }
 
     public List<LostFoundItem> getAllItems() {
         List<LostFoundItem> list = new ArrayList<>();
-        String q = "SELECT * FROM " + TABLE_NAME;
         SQLiteDatabase db = getReadableDatabase();
-        Cursor c = db.rawQuery(q, null);
-        if (c.moveToFirst()) {
-            do {
-                LostFoundItem i = new LostFoundItem(
-                        c.getInt(c.getColumnIndexOrThrow(KEY_ID)),
-                        c.getString(c.getColumnIndexOrThrow(KEY_TITLE)),
-                        c.getString(c.getColumnIndexOrThrow(KEY_DESCRIPTION)),
-                        c.getString(c.getColumnIndexOrThrow(KEY_LOCATION)),
-                        c.getString(c.getColumnIndexOrThrow(KEY_TYPE)),
-                        c.getString(c.getColumnIndexOrThrow(KEY_CONTACT))
-                );
-                list.add(i);
-            } while (c.moveToNext());
+        Cursor c = db.query(TABLE_NAME, null, null, null, null, null, null);
+        while (c.moveToNext()) {
+            list.add(new LostFoundItem(
+                    c.getLong   (c.getColumnIndexOrThrow(COL_ID)),
+                    c.getString (c.getColumnIndexOrThrow(COL_NAME)),
+                    c.getString (c.getColumnIndexOrThrow(COL_PHONE)),
+                    c.getString (c.getColumnIndexOrThrow(COL_DESC)),
+                    c.getString (c.getColumnIndexOrThrow(COL_DATE)),
+                    c.getString (c.getColumnIndexOrThrow(COL_LOC)),
+                    c.getDouble (c.getColumnIndexOrThrow(COL_LAT)),
+                    c.getDouble (c.getColumnIndexOrThrow(COL_LNG)),
+                    c.getString (c.getColumnIndexOrThrow(COL_TYPE))
+            ));
         }
         c.close();
         db.close();
         return list;
     }
 
-    public LostFoundItem getItemById(int id) {
+    /** Returns a single item by its ID, or null if not found */
+    public LostFoundItem getItemById(long id) {
         SQLiteDatabase db = getReadableDatabase();
         Cursor c = db.query(
                 TABLE_NAME,
                 null,
-                KEY_ID + "=?",
-                new String[]{ String.valueOf(id) },
+                COL_ID + "=?",
+                new String[]{String.valueOf(id)},
                 null, null, null
         );
         LostFoundItem item = null;
         if (c.moveToFirst()) {
             item = new LostFoundItem(
-                    c.getInt(c.getColumnIndexOrThrow(KEY_ID)),
-                    c.getString(c.getColumnIndexOrThrow(KEY_TITLE)),
-                    c.getString(c.getColumnIndexOrThrow(KEY_DESCRIPTION)),
-                    c.getString(c.getColumnIndexOrThrow(KEY_LOCATION)),
-                    c.getString(c.getColumnIndexOrThrow(KEY_TYPE)),
-                    c.getString(c.getColumnIndexOrThrow(KEY_CONTACT))
+                    c.getLong   (c.getColumnIndexOrThrow(COL_ID)),
+                    c.getString (c.getColumnIndexOrThrow(COL_NAME)),
+                    c.getString (c.getColumnIndexOrThrow(COL_PHONE)),
+                    c.getString (c.getColumnIndexOrThrow(COL_DESC)),
+                    c.getString (c.getColumnIndexOrThrow(COL_DATE)),
+                    c.getString (c.getColumnIndexOrThrow(COL_LOC)),
+                    c.getDouble (c.getColumnIndexOrThrow(COL_LAT)),
+                    c.getDouble (c.getColumnIndexOrThrow(COL_LNG)),
+                    c.getString (c.getColumnIndexOrThrow(COL_TYPE))
             );
         }
         c.close();
@@ -105,15 +119,10 @@ public class LostFoundDBHelper extends SQLiteOpenHelper {
         return item;
     }
 
-    public void deleteItem(int id) {
+    /** Deletes a single item by its ID */
+    public void deleteItem(long id) {
         SQLiteDatabase db = getWritableDatabase();
-        db.delete(TABLE_NAME, KEY_ID + "=?", new String[]{String.valueOf(id)});
-        db.close();
-    }
-
-    public void deleteAllItems() {
-        SQLiteDatabase db = getWritableDatabase();
-        db.delete(TABLE_NAME, null, null);
+        db.delete(TABLE_NAME, COL_ID + "=?", new String[]{String.valueOf(id)});
         db.close();
     }
 }

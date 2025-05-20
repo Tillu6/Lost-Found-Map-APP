@@ -1,27 +1,43 @@
 package com.example.lostfoundapp;
 
 public class LostFoundItem {
-    private int id;
-    private String title;
+    private long   id;
+    private String name;
+    private String phone;
     private String description;
+    private String date;
     private String location;
+    private double latitude;
+    private double longitude;
     private String type;
-    private String contact;
 
-    public LostFoundItem(int id, String title, String description, String location, String type, String contact) {
-        this.id = id;
-        this.title = title;
+    public LostFoundItem(long id,
+                         String name,
+                         String phone,
+                         String description,
+                         String date,
+                         String location,
+                         double latitude,
+                         double longitude,
+                         String type) {
+        this.id          = id;
+        this.name        = name;
+        this.phone       = phone;
         this.description = description;
-        this.location = location;
-        this.type = type;
-        this.contact = contact;
+        this.date        = date;
+        this.location    = location;
+        this.latitude    = latitude;
+        this.longitude   = longitude;
+        this.type        = type;
     }
 
-    // Getters and Setters
-    public int getId() { return id; }
-    public String getTitle() { return title; }
+    public long   getId()          { return id; }
+    public String getName()        { return name; }
+    public String getPhone()       { return phone; }
     public String getDescription() { return description; }
-    public String getLocation() { return location; }
-    public String getType() { return type; }
-    public String getContact() { return contact; }
+    public String getDate()        { return date; }
+    public String getLocation()    { return location; }
+    public double getLatitude()    { return latitude; }
+    public double getLongitude()   { return longitude; }
+    public String getType()        { return type; }
 }

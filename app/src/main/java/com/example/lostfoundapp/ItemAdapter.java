@@ -43,11 +43,12 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         LostFoundItem item = items.get(position);
 
-        holder.tvTitle.setText(item.getTitle());
+        // Use the correct getters from LostFoundItem
+        holder.tvTitle      .setText(item.getName());
         holder.tvDescription.setText(item.getDescription());
-        holder.tvLocation.setText(item.getLocation());
-        holder.tvType.setText(item.getType());
-        holder.tvContact.setText(item.getContact());
+        holder.tvLocation   .setText(item.getLocation());
+        holder.tvType       .setText(item.getType());
+        holder.tvContact    .setText(item.getPhone());
 
         // attach click listener
         holder.itemView.setOnClickListener(v -> listener.onItemClick(item));
@@ -64,11 +65,11 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvTitle       = itemView.findViewById(R.id.tvTitle);
-            tvDescription = itemView.findViewById(R.id.tvDescription);
-            tvLocation    = itemView.findViewById(R.id.tvLocation);
-            tvType        = itemView.findViewById(R.id.tvType);
-            tvContact     = itemView.findViewById(R.id.tvContact);
+            tvTitle        = itemView.findViewById(R.id.tvTitle);
+            tvDescription  = itemView.findViewById(R.id.tvDescription);
+            tvLocation     = itemView.findViewById(R.id.tvLocation);
+            tvType         = itemView.findViewById(R.id.tvType);
+            tvContact      = itemView.findViewById(R.id.tvContact);
         }
     }
 }

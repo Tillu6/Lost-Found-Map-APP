@@ -36,4 +36,9 @@
 
     <string name="list_all_items">List of all lost and found items</string>
 
+    <string name="google_maps_key">AIzaSyDtONBgXsHE14Q3v25NKw7SHkTDZZbarS8</string>
+    <string name="action_current_location">Get Current Location</string>
+    <string name="action_get_current_location">Get Current Location</string>
+
+
 </resources>

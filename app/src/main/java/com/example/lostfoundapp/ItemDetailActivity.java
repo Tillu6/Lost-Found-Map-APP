@@ -3,11 +3,12 @@ package com.example.lostfoundapp;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 public class ItemDetailActivity extends AppCompatActivity {
     private LostFoundDBHelper db;
-    private int itemId;
+    private long itemId;
 
     private TextView tvTitle;
     private TextView tvDescription;
@@ -29,15 +30,15 @@ public class ItemDetailActivity extends AppCompatActivity {
 
         // 2. Init DB helper and fetch the passed ID
         db     = new LostFoundDBHelper(this);
-        itemId = getIntent().getIntExtra("item_id", -1);
+        itemId = getIntent().getLongExtra("item_id", -1L);
 
         // 3. Load the item from the database
         LostFoundItem item = db.getItemById(itemId);
         if (item != null) {
-            tvTitle      .setText(item.getTitle());
+            tvTitle      .setText(item.getName());
             tvDescription.setText(item.getDescription());
             tvLocation   .setText(item.getLocation());
-            tvContact    .setText(item.getContact());
+            tvContact    .setText(item.getPhone());
         }
 
         // 4. When Remove is tapped, delete and go back

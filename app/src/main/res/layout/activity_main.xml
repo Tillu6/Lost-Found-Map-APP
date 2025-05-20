@@ -32,6 +32,15 @@
             android:paddingVertical="12dp"
             android:layout_marginTop="16dp"/>
 
+        <!-- New SHOW ON MAP button -->
+        <Button
+            android:id="@+id/btnShowMap"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:text="SHOW ON MAP"
+            android:paddingVertical="12dp"
+            android:layout_marginTop="16dp"/>
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
