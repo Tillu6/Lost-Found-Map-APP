@@ -1,53 +1,70 @@
 <p align="center">
-  <img src="https://github.com/Tillu6/sit708_Task_7.1P/blob/main/app/src/main/ic_launcher-playstore.png"
+  <img src="https://github.com/Tillu6/Lost-Found-Map-APP/blob/main/app/src/main/ic_launcher-playstore.png"
        alt="Lost & Found App Icon" width="150"/>
 </p>
 
-# 🚀 Lost & Found APP
+# 🚀 Lost & Found Map App
 
-[![Android CI](https://img.shields.io/badge/Android-16.0%2B-green.svg)](https://developer.android.com/)
-<img src="https://img.shields.io/badge/SQLite-Embedded-blue.svg" alt="SQLite">
+[![Android SDK 28+](https://img.shields.io/badge/Android-SDK%2028%2B-green.svg)](https://developer.android.com/)  
+[![SQLite](https://img.shields.io/badge/SQLite-Embedded-blue.svg)](https://www.sqlite.org/index.html)  
+[![Maps SDK](https://img.shields.io/badge/Google%20Maps-SDK%20Installed-brightgreen.svg)](https://developers.google.com/maps/documentation/android-sdk)
 
-**Lost & Found APP** helps you post and discover lost or found items with ease—online or offline. Built for the SIT708 course, it features Material Design, notch‑safe layouts, and a lightweight SQLite backend.
+**Lost & Found Map App** lets you post, browse and geo-locate lost or found items—even offline. Built for the SIT708 course, it combines Material Design, a lightweight SQLite backend and full Google Maps integration.
 
 ---
 
-## ✨ Features
+## ✨ Core Features
 
-* **Post Adverts**: Easily mark items as “Lost” or “Found” and provide essential details like Name, Phone, Description, Date, and Location.
-* **Browse Listings**: View all active advertisements in a clean and organized RecyclerView list.
-* **View & Manage Items**: Tap on any item to see its detailed information and mark it as recovered when the owner is found.
-* **Efficient Bulk Delete**: Quickly clear all entries from the app's overflow menu for easy data management.
-* **Completely Offline**: All data is stored locally using SQLite, ensuring full functionality even without an internet connection.
+- **Post Adverts**  
+  Mark an item as **Lost** or **Found**, enter your Name, Phone, Description, Date and Location (typed or “Get Current Location”).  
+- **Browse Listings**  
+  Scroll through all active adverts in a clean, responsive RecyclerView.  
+- **Detail & Remove**  
+  Tap any listing to see full details; mark it “recovered” to delete from your local database.  
+- **Map View**  
+  View all your lost & found pins on a Google Map, auto-zooming to show every marker.  
+- **Offline-First**  
+  All data lives locally in SQLite—no network needed.  
+- **Bulk Clear**  
+  Use the overflow menu to delete all entries with a single tap.  
 
 ---
 
 ## 🛠️ Installation & Setup
 
-1.  **Clone the Repository**:
-    ```bash
-    git clone https://github.com/Tillu6/sit708_Task_7.1.git
-    cd LostFoundAPP
-    ```
-
-2.  **Open in Android Studio**:
-    * Ensure your project's `minSdkVersion` is set to **16** or higher and `compileSdkVersion` is **36**.
-    * Allow Gradle to sync the project dependencies.
-    * **Run** the application on your preferred Android emulator or physical device.
-
-3.  **Ready to Go!**
-    The app is now installed and ready to help you find or reunite with your lost items. No further configuration is required.
+1. **Clone the Repository**  
+   ```bash
+   git clone https://github.com/Tillu6/Lost-Found-Map-APP.git
+   cd Lost-Found-Map-APP
 
 ---
+2. **Acquire a Google Maps API Key**
 
-## 🔮 Roadmap: Future Enhancements
+   * Go to the [Google Cloud Console](https://console.cloud.google.com/).
+   * Enable **Maps SDK for Android** and **Places API**.
+   * Create an **API key** and restrict it to your app’s package name & SHA-1.
+   * In **`app/src/main/res/values/strings.xml`**, replace
 
-We're excited about the future of **Lost & Found APP** and plan to implement the following features:
+     ```xml
+     <string name="google_maps_key">YOUR_GOOGLE_MAPS_API_KEY_HERE</string>
+     ```
 
-* **🗺️ Map Integration**: Display geo-tagged "Found" posts on a Google Maps interface, allowing users to easily locate nearby items.
-* **🔔 Smart Notifications**: Implement a subscription system where users can follow categories and receive push notifications for relevant lost or found items in their vicinity.
-* **🖼️ AI-Powered Matching**: Integrate on-device machine learning (TensorFlow Lite) to enable photo-based item matching, suggesting potential matches based on uploaded images.
-* **☁️ Cloud Synchronization**: Utilize Firebase Firestore for secure cloud data storage, enabling multi-device access and a potential web dashboard for enhanced community support.
+3. **Open in Android Studio**
+
+   * Ensure `minSdkVersion 28`, `compileSdkVersion 35+`.
+   * Gradle will sync and download these core deps:
+
+     ```groovy
+     implementation "com.google.android.gms:play-services-maps:18.1.0"
+     implementation "com.google.android.libraries.places:places:2.6.0"
+     implementation "com.google.android.gms:play-services-location:21.0.1"
+     implementation "androidx.recyclerview:recyclerview:1.3.0"
+     implementation "androidx.constraintlayout:constraintlayout:2.1.4"
+     ```
+   * Run on an emulator or physical device.
+
+4. **Done!**
+   The app will launch and you can start posting and locating items on the map right away.
 
 ---
 
@@ -55,25 +72,50 @@ We're excited about the future of **Lost & Found APP** and plan to implement the
 
 ```
 app/
+├── manifests/
+│   └── AndroidManifest.xml       ← permissions, map-API meta-data
 ├── java/com/example/lostfoundapp/
-│   ├── MainActivity.java
-│   ├── AddItemActivity.java
-│   ├── ShowItemsActivity.java
-│   ├── ItemDetailActivity.java
-│   └── LostFoundDBHelper.java
+│   ├── MainActivity.java         ← home screen (Create | List | Map)
+│   ├── AddItemActivity.java      ← post “Lost”/“Found” adverts
+│   ├── ShowItemsActivity.java    ← RecyclerView of all items
+│   ├── ItemDetailActivity.java   ← detail view + remove button
+│   ├── ShowMapActivity.java      ← Google Map with all markers
+│   ├── ItemAdapter.java          ← RecyclerView adapter
+│   ├── LostFoundDBHelper.java    ← SQLite helper (CRUD)
+│   └── LostFoundItem.java        ← data model
 └── res/
     ├── layout/
-    ├── drawable/
-    └── values/
+    │   ├── activity_main.xml
+    │   ├── activity_add_item.xml
+    │   ├── activity_show_items.xml
+    │   ├── activity_item_detail.xml
+    │   ├── activity_show_map.xml
+    │   └── item_row.xml
+    ├── values/
+    │   ├── strings.xml
+    │   └── styles.xml
+    └── drawable/ …  
+
 ```
+
+---
+
+## 🔮 Roadmap & Future Enhancements
+
+* **🔔 Push Notifications**
+  Notify subscribed users when a new item is posted in their area or category.
+* **🖼️ Image Upload & Matching**
+  Allow users to attach photos and leverage on-device ML (TensorFlow Lite) for visual matching.
+* **☁️ Cloud Sync & Auth**
+  Add Firebase/Auth and Firestore so data can sync across devices and users.
+* **📍 Geofencing**
+  Alert users when they enter zones where a lost item has been reported.
 
 ---
 
 ## 🙏 Acknowledgements
 
-A heartfelt **thank you** to the **SIT708** course for this engaging and practical assignment. Your guidance and support have been instrumental in bringing this application to life!
-
----
+Big thanks to the **SIT708** teaching team for guiding this hands-on assignment, and to **Google Maps Platform** for their free tier API.
 
 <p align="center">
 Made with ❤️ and ☕ by Saketh Reddy Poreddy.
