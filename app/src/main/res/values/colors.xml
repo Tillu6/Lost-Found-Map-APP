@@ -10,5 +10,9 @@
     <color name="secondary_dark">#22185D</color>
 
     <color name="btn_remove">#B2101E</color>
+    <color name="neon_blue">#1E88E5</color>
+    <color name="neon_purple">#9C27B0</color>
+    <color name="neon_green">#00E676</color>
+    <color name="accent_neon">#00FFC5</color>
 
 </resources>

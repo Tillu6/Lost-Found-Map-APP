@@ -4,12 +4,15 @@
     <string name="app_name">Lost &amp; Found APP</string>
 
 
-        <string name="app_title">LOST &amp;\nFOUND</string>
-
-        <string name="main_btnNewPost">Report lost item</string>
-        <string name="main_btnViewPosts">View all items</string>
-        <string name="main_btnViewMaps">View on maps</string>
-        <string name="title_activity_maps">MapsActivity</string>
-
+    <string name="app_title">LOST &amp; FOUND</string>
+    <string name="main_btnNewPost">Report lost item</string>
+    <string name="main_btnViewPosts">View all items</string>
+    <string name="main_btnViewMaps">View on maps</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="google_api_key">AIzaSyDtONBgXsHE14Q3v25NKw7SHkTDZZbarS8</string>
+    <!-- Menu items -->
+    <string name="menu_add_item">Add Item</string>
+    <string name="menu_delete_all">Delete All</string>
+    <string name="menu_about">About</string>
 
     </resources>

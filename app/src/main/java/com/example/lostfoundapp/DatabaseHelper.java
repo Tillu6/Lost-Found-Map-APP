@@ -1,27 +1,36 @@
 package com.example.lostfoundapp;
+
 import android.content.Context;
-import android.os.AsyncTask;
 
 import androidx.room.Room;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class DatabaseHelper {
 
-    private Context context;
+    private static final String DATABASE_NAME = "lost_and_found_database3";
+
+    // Singleton instance
     private static DatabaseHelper instance;
-    private LostAndFoundDatabase lostAndFoundDatabase;
 
+    // Your Room database
+    private final LostAndFoundDatabase database;
+
+    // Private constructor to enforce singleton
     private DatabaseHelper(Context context) {
-        this.context = context;
-
-        lostAndFoundDatabase = Room.databaseBuilder(context, LostAndFoundDatabase.class, "lost_and_found_database3")
+        // Use application context to avoid leaking an Activity
+        database = Room.databaseBuilder(
+                        context.getApplicationContext(),
+                        LostAndFoundDatabase.class,
+                        DATABASE_NAME
+                )
                 .fallbackToDestructiveMigration()
-                .allowMainThreadQueries()
+                .allowMainThreadQueries()  // consider removing for real apps!
                 .build();
     }
 
+    /**
+     * Get the singleton instance of DatabaseHelper.
+     * @param context any Context (Activity, Service, etc.)
+     */
     public static synchronized DatabaseHelper getInstance(Context context) {
         if (instance == null) {
             instance = new DatabaseHelper(context);
@@ -29,7 +38,10 @@ public class DatabaseHelper {
         return instance;
     }
 
-    public LostAndFoundDatabase getLostAndFoundDatabase() {
-        return lostAndFoundDatabase;
+    /**
+     * Expose your Room database.
+     */
+    public LostAndFoundDatabase getDatabase() {
+        return database;
     }
 }

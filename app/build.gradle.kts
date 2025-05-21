@@ -1,12 +1,18 @@
 plugins {
     alias(libs.plugins.android.application)
-    // If you don’t already have the Kotlin Android plugin, add:
+    // If you do write any Kotlin (e.g. your @Dao interfaces or LiveData observers), uncomment:
     // alias(libs.plugins.kotlin.android)
+    // alias(libs.plugins.kotlin.kapt)
 }
 
 android {
     namespace = "com.example.lostfoundapp"
     compileSdk = 35
+
+    // Enable viewBinding so your ActivityMapsBinding class is generated
+    buildFeatures {
+        viewBinding = true
+    }
 
     defaultConfig {
         applicationId = "com.example.lostfoundapp"
@@ -33,7 +39,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
-    // If you’re writing any Kotlin code, add this block:
+    // If you’re writing any Kotlin code, enable this:
     // kotlinOptions {
     //     jvmTarget = "11"
     // }
@@ -54,6 +60,14 @@ dependencies {
 
     // Fused Location Provider
     implementation("com.google.android.gms:play-services-location:21.2.0")
+
+    // Room (local database)
+    implementation("androidx.room:room-runtime:2.5.0")
+    // If you need Kotlin annotation processing, use kapt instead:
+    // kapt("androidx.room:room-compiler:2.5.0")
+    annotationProcessor("androidx.room:room-compiler:2.5.0")
+    // optional – Kotlin Extensions and Coroutines support for Room
+    implementation("androidx.room:room-ktx:2.5.0")
 
     // Test libraries
     testImplementation(libs.junit)
