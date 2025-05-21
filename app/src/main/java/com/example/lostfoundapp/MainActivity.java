@@ -1,35 +1,48 @@
 package com.example.lostfoundapp;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
-    private Button btnCreateAdvert;
-    private Button btnShowItems;
-    private Button btnShowMap;
+
+    private Button btnNewPost;
+    private Button btnViewPosts;
+    private Button btnViewMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
 
-        btnCreateAdvert = findViewById(R.id.btnCreateAdvert);
-        btnShowItems    = findViewById(R.id.btnShowItems);
-        btnShowMap      = findViewById(R.id.btnShowMap);
+        btnNewPost = findViewById(R.id.btnNewPost);
+        btnViewPosts = findViewById(R.id.btnViewPosts);
+        btnViewMap = findViewById(R.id.btnViewMap);
 
-        btnCreateAdvert.setOnClickListener(v ->
-                startActivity(new Intent(MainActivity.this, AddItemActivity.class))
-        );
+        btnNewPost.setOnClickListener(view -> {
+            Intent intent = new Intent(this, NewPostActivity.class);
+            startActivity(intent);
+        });
 
-        btnShowItems.setOnClickListener(v ->
-                startActivity(new Intent(MainActivity.this, ShowItemsActivity.class))
-        );
+        btnViewPosts.setOnClickListener(view -> {
+            Intent intent = new Intent(this, ViewPostsActivity.class);
+            startActivity(intent);
+        });
 
-        btnShowMap.setOnClickListener(v ->
-                startActivity(new Intent(MainActivity.this, ShowMapActivity.class))
-        );
+        btnViewMap.setOnClickListener(view -> {
+            Intent intent = new Intent(this, MapsActivity.class);
+            startActivity(intent);
+        });
     }
 }
